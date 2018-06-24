@@ -6,16 +6,19 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 def pull_screenshot():
-    os.system('adb shell screencap -p /sdcard/findTheDiff.png')
-    os.system('adb pull /sdcard/findTheDiff.png .')
+    #os.system('adb shell screencap -p /sdcard/findTheDiff.png')
+    #os.system('adb pull /sdcard/findTheDiff.png .')
     img=cv2.imread('findTheDiff.png')
-    crop_img1=img[168:991,214:1039]#这里需要将对比的部分以img的格式提取出来
-    crop_img2=img[1027:1850,214:1039]
+    #crop_img1=img[168:991,214:1039]#这里需要将对比的部分以img的格式提取出来
+    #crop_img2=img[1027:1850,214:1039]
+    crop_img1=img[165:999,210:1040]#截取范围高度（上：下） 宽度（左：右）
+    crop_img2=img[1025:1850,210:1045]
     cv2.imwrite('img1.png',crop_img1)
     cv2.imwrite('img2.png',crop_img2)
     img1=Image.open('img1.png')
     img2=Image.open('img2.png')
     out=ImageChops.difference(img1,img2)
+    out.save('img3.png')
     return out
 
 def on_click(event):
