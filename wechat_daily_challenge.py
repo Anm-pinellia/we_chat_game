@@ -5,21 +5,30 @@ from PIL import ImageChops
 import matplotlib.pyplot as plt
 import numpy as np
 
-def pull_screenshot():
-    #os.system('adb shell screencap -p /sdcard/findTheDiff.png')
-    #os.system('adb pull /sdcard/findTheDiff.png .')
+def pull_screenshot(phone=True):
+    #Connect to phone
+    if phone:
+        os.system('adb shell screencap -p /sdcard/findTheDiff.png')
+        os.system('adb pull /sdcard/findTheDiff.png .')
     img=cv2.imread('findTheDiff.png')
-    #crop_img1=img[168:991,214:1039]#这里需要将对比的部分以img的格式提取出来
-    #crop_img2=img[1027:1850,214:1039]
-    crop_img1=img[165:999,210:1040]#截取范围高度（上：下） 宽度（左：右）
-    crop_img2=img[1025:1850,210:1045]
+    # 闯关模式
+    # crop_img1=img[165:980,210:1040]#截取范围高度（上：下） 宽度（左：右）
+    # crop_img2=img[1025:1840,210:1040]
+    #个人挑战模式 将图片完全对齐避免误差
+    crop_img1=img[100:920,200:1025]#截取范围高度（上：下） 宽度（左：右）
+    crop_img2=img[1000:1820,200:1025]
     cv2.imwrite('img1.png',crop_img1)
     cv2.imwrite('img2.png',crop_img2)
     img1=Image.open('img1.png')
     img2=Image.open('img2.png')
+    #两张图片的绝对值，相同像素减去
     out=ImageChops.difference(img1,img2)
-    out.save('img3.png')
-    return out
+    #图片反色，恢复为正常色彩
+    out_normal=ImageChops.invert(out)
+    out_normal.save('diff.png')
+    out_invert=ImageChops.invert(out_normal)
+    # out_invert.save('nor_inver.png')
+    return out_normal
 
 def on_click(event):
     click_count = 0
@@ -34,7 +43,7 @@ def on_click(event):
 def press(coords):
     ix = coords[0][0]
     iy = coords[0][1]
-    cmd = 'adb shell input swipe {x1} {y1} {x2} {y2} {duration}'.format(x1=ix-10,y1=iy-10,x2=ix+10,y2=iy+10,duration=100)
+    cmd = 'adb shell input tap {x1} {y1} '.format(x1=ix, y1=iy)
     os.system(cmd)
     
 
@@ -44,13 +53,17 @@ def main():
         if inp=='n' or inp=='N':
             break
         fig = plt.figure()
-        img = np.array(pull_screenshot())
-        im = plt.imshow(img, animated=True)
+        img = np.array(pull_screenshot(False))
+        plt.imshow(img, animated=True)
         fig.canvas.mpl_connect('button_press_event',on_click)
         plt.show()
 if __name__=="__main__":
+    # while True:
+    #     pull_screenshot()
+    #     a=input('next')
+    #     if a=='n':
+    #         break
     main()
-        
     
 
 

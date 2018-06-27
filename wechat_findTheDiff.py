@@ -11,8 +11,10 @@ def pull_screenshot():
     os.system('adb shell screencap -p /sdcard/findTheDiff.png')
     os.system('adb pull /sdcard/findTheDiff.png .')
     img=cv2.imread('findTheDiff.png')
-    crop_img1=img[99:924,199:1024]#这里需要将对比的部分以img的格式提取出来
-    crop_img2=img[997:1822,199:1024]
+    # crop_img1=img[99:924,199:1024]#这里需要将对比的部分以img的格式提取出来
+    # crop_img2=img[997:1822,199:1024]
+    crop_img1=img[100:920,200:1025]#截取范围高度（上：下） 宽度（左：右）
+    crop_img2=img[1000:1820,200:1025]
     cv2.imwrite('img1.png',crop_img1)
     cv2.imwrite('img2.png',crop_img2)
     img1=Image.open('img1.png')
@@ -23,7 +25,7 @@ def pull_screenshot():
 def on_click(event):
     click_count = 0
     ix,iy=event.xdata,event.ydata
-    coords=[(int(ix)+199,int(iy)+99)]#从小方块坐标转换到屏幕坐标
+    coords=[(int(ix)+200,int(iy)+100)]#从小方块坐标转换到屏幕坐标
     print('now=',coords)
     click_count+=1
     if click_count>0:
@@ -33,7 +35,9 @@ def on_click(event):
 def press(coords):
     ix = coords[0][0]
     iy = coords[0][1]
-    cmd = 'adb shell input swipe {x1} {y1} {x2} {y2} {duration}'.format(x1=ix-10,y1=iy-10,x2=ix+10,y2=iy+10,duration=100)
+    # cmd = 'adb shell input swipe {x1} {y1} {x2} {y2} {duration}'.format(x1=ix-10,y1=iy-10,x2=ix+10,y2=iy+10,duration=100)
+    #
+    cmd = 'adb shell input tap {x1} {y1} '.format(x1=ix,y1=iy)
     os.system(cmd)
     
 
