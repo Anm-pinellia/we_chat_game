@@ -50,10 +50,11 @@ for c in cnts:
     cX = int(M["m10"] / M["m00"])
     cY = int(M["m01"] / M["m00"])
 
-    # draw the contour and center of the shape on the image
+    # draw the contour and center of the shape on the image 绿色轮廓
     cv2.drawContours(img, [c], -1, (0, 255, 0), 2)
-    #画中心点
+    #画中心点(0, 0, 0)黑色
     cv2.circle(img, (cX, cY), 7, (0, 0, 0), -1)
+    print('center point:',cX,cY)
     #画轮廓
     cv2.putText(img, "center", (cX - 20, cY - 20),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2)
 
