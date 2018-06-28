@@ -15,8 +15,8 @@ def pull_screenshot(phone=True):
     # crop_img1=img[165:980,210:1040]#截取范围高度（上：下） 宽度（左：右）
     # crop_img2=img[1025:1840,210:1040]
     #个人挑战模式 将图片完全对齐避免误差
-    crop_img1=img[100:920,200:1025]#截取范围高度（上：下） 宽度（左：右）
-    crop_img2=img[1000:1820,200:1025]
+    crop_img1=img[140:920,200:1025]#截取范围高度（上：下） 宽度（左：右）
+    crop_img2=img[1040:1820,200:1025]
     cv2.imwrite('img1.png',crop_img1)
     cv2.imwrite('img2.png',crop_img2)
     img1=Image.open('img1.png')
@@ -63,8 +63,8 @@ if __name__=="__main__":
     #     a=input('next')
     #     if a=='n':
     #         break
-    main()
-    
+    # main()
+    pull_screenshot()
 
 
 
